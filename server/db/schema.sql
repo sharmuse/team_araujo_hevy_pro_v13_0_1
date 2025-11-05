@@ -1,0 +1,43 @@
+
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  email TEXT NOT NULL UNIQUE,
+  password_hash TEXT NOT NULL,
+  role TEXT NOT NULL CHECK(role IN ('PROFESSOR','ALUNO')),
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS trainings (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  student_id INTEGER NOT NULL,
+  professor_id INTEGER NOT NULL,
+  title TEXT NOT NULL,
+  notes TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(student_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY(professor_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS training_exercises (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  training_id INTEGER NOT NULL,
+  exercise_name TEXT NOT NULL,
+  sets INTEGER NOT NULL,
+  reps TEXT NOT NULL, -- e.g., "8-10"
+  rest_seconds INTEGER NOT NULL DEFAULT 90, -- stored in seconds; UI shows mm:ss
+  order_index INTEGER NOT NULL,
+  FOREIGN KEY(training_id) REFERENCES trainings(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS notifications (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL, -- who should receive
+  type TEXT NOT NULL,       -- NEW_STUDENT or NEW_TRAINING
+  payload TEXT NOT NULL,    -- JSON string with extra info
+  read INTEGER NOT NULL DEFAULT 0,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+);
