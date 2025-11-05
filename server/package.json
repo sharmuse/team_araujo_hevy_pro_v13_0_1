@@ -1,6 +1,6 @@
 {
   "name": "team-araujo-hevy-pro-server",
-  "version": "13.0.0",
+  "version": "13.0.2",
   "type": "module",
   "main": "src/index.js",
   "scripts": {
@@ -16,10 +16,10 @@
     "nodemailer": "^6.9.13",
     "socket.io": "^4.7.5",
     "sqlite3": "^5.1.7",
-    "uuid": "^9.0.1",
-    "sqlite": "^5.2.4"
+    "sqlite": "^5.1.1",
+    "uuid": "^9.0.1"
   },
   "engines": {
-    "node": ">=18"
+    "node": "20.x"
   }
 }
